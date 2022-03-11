@@ -1,5 +1,3 @@
-# acedemind-100-days-code
+# section-2: HTML & CSS basics
 
-Acedemind 100 days code Udemy course practice
-
-## section-2: HTML & CSS basics
+This section deals with basics of HTML and CSS.
