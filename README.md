@@ -1,13 +1,10 @@
-# acedemind-100-days-code
+# Section-10: Add forms to website
 
-Acedemind 100 days code Udemy course practice
-
-## section-2: HTML & CSS basics
-
-## section-7: HTML & CSS Layout's
-
-## section-8: Responsive Web Design
-
-## section-10: Forms
-
-Add forms to websites.
+- Different input elements
+- Textarea
+- Select/Option
+- Radio Button
+- Checkbox
+- Different types of button (submit/reset)
+- Attributes on form
+- Styles

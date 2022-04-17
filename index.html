@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML Forms</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <h1>Demo form to collect user details</h1>
+    <main>
+      <form action="/user-data" method="POST" autocomplete="off">
+        <section>
+          <h3 class="form-title">Personal details</h3>
+          <ul>
+            <li>
+              <!-- Input "text" field -->
+              <label for="username">Your name</label>
+              <input
+                type="text"
+                name="user-name"
+                id="username"
+                placeholder="First Last"
+                required
+              />
+            </li>
+            <li>
+              <!-- Input "email" field -->
+              <label for="useremail">Your email address</label>
+              <input type="email" name="user-email" id="useremail" required />
+            </li>
+            <li>
+              <!-- Input "password" field -->
+              <label for="userpassword">Your password</label>
+              <input
+                type="password"
+                name="user-password"
+                id="userpassword"
+                required
+                minlength="7"
+              />
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h3 class="form-title">More details</h3>
+          <ul>
+            <li>
+              <!-- Input "number" field -->
+              <label for="userage">Your age</label>
+              <input
+                type="number"
+                step="1"
+                name="user-age"
+                id="userage"
+                required
+                min="18"
+                max="100"
+              />
+            </li>
+            <li>
+              <!-- Input "date" field -->
+              <label for="userbirthdate">Your birthdate</label>
+              <input
+                type="date"
+                name="user-birthdate"
+                id="userbirthdate"
+                required
+                min="1921-01-01"
+                max="2022-01-01"
+              />
+            </li>
+            <li>
+              <!-- Select/Option -->
+              <label for="userfavcolor">Your favourite color</label>
+              <select name="user-fav-color" id="userfavcolor">
+                <option value="blue">Blue</option>
+                <option value="black">Black</option>
+                <option value="red">Red</option>
+              </select>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <!-- Text area -->
+          <label for="usermessage">Your message</label>
+          <textarea
+            name="user-message"
+            id="usermessage"
+            cols="30"
+            rows="10"
+          ></textarea>
+        </section>
+
+        <section>
+          <!-- Radio button - allows to select only 1 option -->
+          <h3 class="form-title">How should we verify your account?</h3>
+          <ul>
+            <li class="form-control-inline">
+              <input
+                type="radio"
+                name="user-verify-method"
+                id="verify-sms"
+                value="verify-sms"
+                required
+              />
+              <label for="verify-sms">Via text message (SMS)</label>
+            </li>
+            <li class="form-control-inline">
+              <input
+                type="radio"
+                name="user-verify-method"
+                id="verify-phone"
+                value="verify-phone"
+                required
+              />
+              <label for="verify-phone">Via a phone call</label>
+            </li>
+            <li class="form-control-inline">
+              <input
+                type="radio"
+                name="user-verify-method"
+                id="verify-email"
+                value="verify-email"
+                required
+              />
+              <label for="verify-email">Via an email</label>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h3 class="form-title">How should we verify your account?</h3>
+          <!-- Multiple checkbox/options for a single question -->
+          <ul>
+            <li class="form-control-inline">
+              <input
+                type="checkbox"
+                name="user-contact"
+                id="contact-email"
+                value="contact-email"
+              />
+              <label for="contact-email">Contact me via email</label>
+            </li>
+            <li class="form-control-inline">
+              <input
+                type="checkbox"
+                name="user-contact"
+                id="contact-phone"
+                value="contact-phone"
+              />
+              <label for="contact-phone">Contact me via phone</label>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <!-- Single checkbox -->
+          <div class="form-control-inline policy-terms-container">
+            <input type="checkbox" name="user-agree-terms" id="agree-terms" />
+            <label for="agree-terms">Agree to terms?</label>
+          </div>
+        </section>
+
+        <section>
+          <button type="reset">Reset</button>
+          <button>Submit</button>
+          <!-- Default type="submit" inside form -->
+        </section>
+      </form>
+    </main>
+  </body>
+</html>
