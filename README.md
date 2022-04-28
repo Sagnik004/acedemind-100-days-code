@@ -11,3 +11,7 @@ Acedemind 100 days code Udemy course practice
 ## section-10: Forms
 
 Add forms to websites.
+
+## section-12: Advanced JavaScript - Working with DOM
+
+DOM related syntax and features.
