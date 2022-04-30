@@ -1,3 +1,4 @@
 # Section-12: Advanced JavaScript - Working with DOM
 
-Added the remaining chars count practice project.
+- Added the remaining chars count practice project
+- Added the exercise code
