@@ -69,3 +69,13 @@
   color: rgb(47, 4, 82);
   margin: 0.5rem, 0;
 }
+
+@media (max-width: 48rem) {
+  #game-configuration ol {
+    flex-direction: column;
+  }
+
+  #game-configuration li {
+    width: auto;
+  }
+}

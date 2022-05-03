@@ -3,6 +3,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   color: rgb(44, 41, 44);
   background-color: rgb(248, 242, 248);
+  box-sizing: border-box;
 }
 
 #main-header {
@@ -37,4 +38,14 @@ body {
 .btn-alt:hover {
   background-color: #bdafd8;
   border-color: transparent;
+}
+
+@media (max-width: 48rem) {
+  #main-header {
+    padding: 1rem 3%;
+  }
+
+  #main-header > * {
+    margin: 0.7rem auto;
+  }
 }
