@@ -17,3 +17,7 @@ Add forms to websites.
 DOM related syntax and features.
 
 ## Section-14: Tic-Tac-Toe Game project
+
+## Section-19: Express with EJS
+
+Static and dynamic content with templates (EJS)
