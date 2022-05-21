@@ -21,3 +21,7 @@ DOM related syntax and features.
 ## Section-19: Express with EJS
 
 Static and dynamic content with templates (EJS)
+
+## Section-20: Handling dynamic routes, error page etc.
+
+This section enhances the project from section-19 to add dynamic routes and error page.
