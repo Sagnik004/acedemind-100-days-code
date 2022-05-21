@@ -1,8 +1,12 @@
+const fs = require('fs');
 const path = require('path');
+
 const express = require('express');
 
 const app = express();
+
 app.use(express.static('public'));
+app.use(express.urlencoded({ extended: false }));
 
 /* ROUTES */
 app.get('/', (req, res) => {
@@ -18,6 +22,25 @@ app.get('/restaurants', (req, res) => {
 app.get('/recommend', (req, res) => {
   const htmlFilePath = path.join(__dirname, 'views', 'recommend.html');
   res.sendFile(htmlFilePath);
+});
+
+app.post('/recommend', (req, res) => {
+  const restuarant = {
+    name: req.body.name,
+    address: req.body.address,
+    cuisine: req.body.cuisine,
+    website: req.body.website,
+    description: req.body.description,
+  };
+
+  const filePath = path.join(__dirname, 'data', 'restaurants.json');
+  const fileData = JSON.parse(fs.readFileSync(filePath));
+
+  fileData.push(restuarant);
+
+  fs.writeFileSync(filePath, JSON.stringify(fileData));
+
+  res.redirect('/confirm');
 });
 
 app.get('/about', (req, res) => {
