@@ -1,3 +1,3 @@
-# Section-19: Express with EJS
+# Section-20: Handling dynamic routes, error page etc.
 
-Build static and dynamic contents with templates (EJS).
+Add dynamic routes to the project, and handle error 404 requests.
