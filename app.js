@@ -17,7 +17,13 @@ app.get('/', (req, res) => {
 });
 
 app.get('/restaurants', (req, res) => {
-  res.render('restaurants');
+  const filePath = path.join(__dirname, 'data', 'restaurants.json');
+  const storedRestaurants = JSON.parse(fs.readFileSync(filePath));
+
+  res.render('restaurants', {
+    numberOfRestaurantsFound: storedRestaurants.length,
+    restaurants: storedRestaurants,
+  });
 });
 
 app.get('/recommend', (req, res) => {
