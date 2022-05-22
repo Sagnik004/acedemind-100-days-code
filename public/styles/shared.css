@@ -128,6 +128,19 @@ main p {
   color: rgb(240, 167, 9);
 }
 
+a.btn {
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  background-color: rgb(202, 158, 62);
+  border-radius: 4px;
+  color: white;
+}
+
+a.btn:hover,
+a.btn:focus {
+  background-color: rgb(202, 141, 62);
+}
+
 @media (min-width: 60rem) {
   #main-header {
     padding: 0 5%;

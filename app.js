@@ -41,6 +41,8 @@ app.get('/restaurants/:id', (req, res) => {
       return res.render('restaurant-detail', { restaurant });
     }
   }
+
+  return res.render('404');
 });
 
 app.get('/recommend', (req, res) => {
@@ -73,6 +75,10 @@ app.get('/about', (req, res) => {
 
 app.get('/confirm', (req, res) => {
   res.render('confirm');
+});
+
+app.use((req, res) => {
+  res.render('404');
 });
 
 app.listen(3000, () => console.log('App started successfully...'));
