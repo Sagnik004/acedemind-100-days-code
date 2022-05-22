@@ -12,7 +12,29 @@ const saveNewRestaurant = (newRestaurantData) => {
   fs.writeFileSync(filePath, JSON.stringify(newRestaurantData));
 };
 
+const sortRestaurantsAsc = (restaurantsList) => {
+  restaurantsList.sort((resA, resB) => {
+    if (resA.name > resB.name) {
+      return 1;
+    }
+    return -1;
+  });
+  return restaurantsList;
+};
+
+const sortRestaurantsDesc = (restaurantsList) => {
+  restaurantsList.sort((resA, resB) => {
+    if (resB.name > resA.name) {
+      return 1;
+    }
+    return -1;
+  });
+  return restaurantsList;
+};
+
 module.exports = {
   getStoredRestaurants,
   saveNewRestaurant,
+  sortRestaurantsAsc,
+  sortRestaurantsDesc,
 };

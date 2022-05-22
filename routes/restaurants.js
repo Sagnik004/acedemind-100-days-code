@@ -1,14 +1,33 @@
 const router = require('express').Router();
 const uuid = require('uuid');
 
-const { getStoredRestaurants, saveNewRestaurant } = require('../util/restaurant-data');
+const {
+  getStoredRestaurants,
+  saveNewRestaurant,
+  sortRestaurantsAsc,
+  sortRestaurantsDesc,
+} = require('../util/restaurant-data');
 
 router.get('/restaurants', (req, res) => {
+  let sortOrder = req.query.order;
+  if (sortOrder !== 'asc' && sortOrder !== 'desc') {
+    sortOrder = 'asc';
+  }
+
   const storedRestaurants = getStoredRestaurants();
+  let sortedRestaurantsList = [];
+  switch (sortOrder) {
+    case 'asc':
+      sortedRestaurantsList = sortRestaurantsAsc(storedRestaurants);
+      break;
+    case 'desc':
+      sortedRestaurantsList = sortRestaurantsDesc(storedRestaurants);
+  }
 
   res.render('restaurants', {
-    numberOfRestaurantsFound: storedRestaurants.length,
-    restaurants: storedRestaurants,
+    numberOfRestaurantsFound: sortedRestaurantsList.length,
+    restaurants: sortedRestaurantsList,
+    nextSortOrder: sortOrder === 'asc' ? 'desc' : 'asc',
   });
 });
 
