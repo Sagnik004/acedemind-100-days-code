@@ -77,8 +77,14 @@ app.get('/confirm', (req, res) => {
   res.render('confirm');
 });
 
+// 404 - Page not found handler
 app.use((req, res) => {
-  res.render('404');
+  res.status(404).render('404');
+});
+
+// Internal Server Error handler
+app.use((error, req, res, next) => {
+  res.status(500).render('500');
 });
 
 app.listen(3000, () => console.log('App started successfully...'));
