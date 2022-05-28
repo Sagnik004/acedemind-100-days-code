@@ -51,6 +51,12 @@
   font-style: italic;
 }
 
+.post-details-separator {
+  border: 0.5px solid rgb(194, 194, 194);
+  background-color: rgb(194, 194, 194);
+  border-radius: 4px;
+}
+
 #body {
   white-space: pre-wrap; /* This ensures that line breaks and whitespace are kept */
 }
