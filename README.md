@@ -25,3 +25,7 @@ Static and dynamic content with templates (EJS)
 ## Section-20: Handling dynamic routes, error page etc.
 
 This section enhances the project from section-19 to add dynamic routes and error page.
+
+## Section-24: Using MySQL in NodeJS and Express websites
+
+This section integrates MySQL DB with a NodeJS and Express app.
