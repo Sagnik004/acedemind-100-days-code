@@ -49,3 +49,5 @@ Inserting predefined authors
     INSERT INTO authors (name, email) VALUES ("Sagnik Chakraborty", "sagnik@test.com");
     INSERT INTO authors (name, email) VALUES ("David Lorenz", "david.lorenz@test.com");
 ```
+
+> [MySQL2](https://www.npmjs.com/package/mysql2) NPM package has been used here.
