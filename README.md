@@ -18,13 +18,13 @@ This section integrates MySQL DB with a NodeJS and Express app.
 
 Creating the database schema
 
-```sh
+```sql
     CREATE SCHEMA `blog` ;
 ```
 
 Creating the tables
 
-```sh
+```sql
     CREATE TABLE blog.authors (
         id INT NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
@@ -32,7 +32,7 @@ Creating the tables
         PRIMARY KEY (id));
 ```
 
-```sh
+```sql
     CREATE TABLE blog.posts (
         id INT NOT NULL AUTO_INCREMENT,
         title VARCHAR(255) NOT NULL,
@@ -41,4 +41,11 @@ Creating the tables
         date DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
         author_id INT NOT NULL,
         PRIMARY KEY (id));
+```
+
+Inserting predefined authors
+
+```sql
+    INSERT INTO authors (name, email) VALUES ("Sagnik Chakraborty", "sagnik@test.com");
+    INSERT INTO authors (name, email) VALUES ("David Lorenz", "david.lorenz@test.com");
 ```
