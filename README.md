@@ -28,4 +28,9 @@ This section enhances the project from section-19 to add dynamic routes and erro
 
 ## Section-24: Using MySQL in NodeJS and Express websites
 
-This section integrates MySQL DB with a NodeJS and Express app.
+This section integrates MySQL DB with a Node and Express app.
+
+## Section-26: Node.js and MongoDB (NoSQL)
+
+This section integrates MongoDB with a Node and Express app.
+ 
