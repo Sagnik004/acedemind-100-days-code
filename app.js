@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 
 const blogRoutes = require('./routes/blog');
+const { connectToDB } = require('./data/database');
 
 const app = express();
 
@@ -22,4 +23,11 @@ app.use((error, req, res, next) => {
   res.status(500).render('500');
 });
 
-app.listen(3000);
+connectToDB()
+  .then(() => {
+    app.listen(3000, () => console.log('Application successfully started...'));
+  })
+  .catch((err) => {
+    console.error('Could not connect to database! App start failed!!');
+    console.log(err);
+  });

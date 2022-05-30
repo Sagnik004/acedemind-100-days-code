@@ -16,3 +16,11 @@ And then inserted 2 author's documents in "authors" collection -
 db.authors.insertOne({ name: "Sagnik Chakraborty", email: "sagnik@test.com" });
 db.authors.insertOne({ name: "Dan Lorenz", email: "dan.lorenz@hotmail.com" });
 ```
+
+## NPM package - MongoDB Driver
+
+Used below command to setup the official MongoDB driver -
+
+```
+npm install mongodb@4.5
+```
