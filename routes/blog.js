@@ -24,7 +24,7 @@ router.get('/posts', async (req, res) => {
       .toArray();
   } catch (err) {
     console.error(err);
-    return res.render('500');
+    return res.status(500).render('500');
   }
 
   res.render('posts-list', { posts });
@@ -37,7 +37,7 @@ router.get('/new-post', async function (req, res) {
     res.render('create-post', { authors });
   } catch (err) {
     console.error(err);
-    render('500');
+    res.status(500).render('500');
   }
 });
 
@@ -52,7 +52,7 @@ router.post('/posts', async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    return res.render('500');
+    return res.status(500).render('500');
   }
 
   const newPost = {
@@ -71,7 +71,7 @@ router.post('/posts', async (req, res) => {
     await db.getDB().collection('posts').insertOne(newPost);
     res.redirect('/posts');
   } catch (err) {
-    res.render('500');
+    res.status(500).render('500');
   }
 });
 
@@ -84,9 +84,9 @@ router.get('/posts/:id', async (req, res) => {
       .getDB()
       .collection('posts')
       .findOne({ _id: new ObjectId(postId) }, { summary: 0 });
-    
+
     if (!post) {
-      return res.render('404');
+      return res.status(404).render('404');
     }
 
     post.humanReadableDate = post.date.toLocaleDateString('en-US', {
@@ -100,7 +100,57 @@ router.get('/posts/:id', async (req, res) => {
     res.render('post-detail', { post });
   } catch (err) {
     console.error(err);
-    res.render('500');
+    res.status(500).render('500');
+  }
+});
+
+// Display edit post page
+router.get('/posts/:id/edit', async (req, res) => {
+  const postId = req.params.id;
+
+  try {
+    const post = await db
+      .getDB()
+      .collection('posts')
+      .findOne(
+        { _id: new ObjectId(postId) },
+        { title: 1, summary: 1, body: 1 }
+      );
+
+    if (!post) {
+      return res.status(404).render('404');
+    }
+
+    res.render('update-post', { post });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('500');
+  }
+});
+
+// Handle update post request
+router.post('/posts/:id/edit', async (req, res) => {
+  const postId = req.params.id;
+
+  const updatedPost = {
+    title: req.body.title,
+    summary: req.body.summary,
+    body: req.body.content,
+  };
+
+  try {
+    await db
+      .getDB()
+      .collection('posts')
+      .updateOne(
+        { _id: new ObjectId(postId) },
+        { $set: { ...updatedPost }},
+      );
+
+    res.redirect('/posts');
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('500');
   }
 });
 
