@@ -75,4 +75,33 @@ router.post('/posts', async (req, res) => {
   }
 });
 
+// View details of a post
+router.get('/posts/:id', async (req, res) => {
+  const postId = req.params.id;
+
+  try {
+    const post = await db
+      .getDB()
+      .collection('posts')
+      .findOne({ _id: new ObjectId(postId) }, { summary: 0 });
+    
+    if (!post) {
+      return res.render('404');
+    }
+
+    post.humanReadableDate = post.date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+    post.date = post.date.toISOString();
+
+    res.render('post-detail', { post });
+  } catch (err) {
+    console.error(err);
+    res.render('500');
+  }
+});
+
 module.exports = router;
