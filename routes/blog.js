@@ -12,8 +12,22 @@ router.get('/', (req, res) => {
 });
 
 // Home page - display all posts
-router.get('/posts', (req, res) => {
-  res.render('posts-list');
+router.get('/posts', async (req, res) => {
+  let posts;
+
+  try {
+    posts = await db
+      .getDB()
+      .collection('posts')
+      .find({})
+      .project({ title: 1, summary: 1, 'author.name': 1 })
+      .toArray();
+  } catch (err) {
+    console.error(err);
+    return res.render('500');
+  }
+
+  res.render('posts-list', { posts });
 });
 
 // Display create new post page
