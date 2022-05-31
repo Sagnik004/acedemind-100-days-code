@@ -142,11 +142,21 @@ router.post('/posts/:id/edit', async (req, res) => {
     await db
       .getDB()
       .collection('posts')
-      .updateOne(
-        { _id: new ObjectId(postId) },
-        { $set: { ...updatedPost }},
-      );
+      .updateOne({ _id: new ObjectId(postId) }, { $set: { ...updatedPost } });
 
+    res.redirect('/posts');
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('500');
+  }
+});
+
+// Handle delete a post
+router.post('/posts/:id/delete', async (req, res) => {
+  const postId = new ObjectId(req.params.id);
+
+  try {
+    await db.getDB().collection('posts').deleteOne({ _id: postId });
     res.redirect('/posts');
   } catch (err) {
     console.error(err);
