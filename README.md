@@ -37,3 +37,7 @@ This section integrates MongoDB with a Node and Express app.
 ## Section-27: Adding file upload to a website
 
 In this section we go through what setup we need to do in client side, backend side and on database end to successfully provide a feature of file uploads to a site.
+
+## Section-28: AJAX and async JS-driven HTTP requests
+
+In this section we go through the client side implementation of async HTTP requests and handling responses.
