@@ -42,17 +42,21 @@ const displayComments = (comments) => {
 const getAllComments = async (postId) => {
   try {
     const response = await fetch(`/posts/${postId}/comments`);
-    const fetchedComments = await response.json();
-
-    displayComments(fetchedComments);
+    if (response.ok) {
+      const fetchedComments = await response.json();
+      displayComments(fetchedComments);
+    } else {
+      alert('Something went wrong, could not fetch comments for this blog!');
+    }
   } catch (err) {
     console.error(err);
+    alert('Something went wrong, could not fetch comments for this blog!');
   }
 };
 
 const saveNewComment = async (postId, newComment) => {
   try {
-    await fetch(`/posts/${postId}/comments`, {
+    const response = await fetch(`/posts/${postId}/comments`, {
       method: 'POST',
       body: JSON.stringify(newComment),
       headers: {
@@ -60,9 +64,14 @@ const saveNewComment = async (postId, newComment) => {
       },
     });
 
-    getAllComments(postId);
+    if (response.ok) {
+      getAllComments(postId);
+    } else {
+      alert('Something went wrong, could not save your comment!');
+    }
   } catch (err) {
     console.error(err);
+    alert('Something went wrong, could not save your comment!');
   }
 };
 
