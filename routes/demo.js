@@ -24,6 +24,26 @@ router.post('/signup', async (req, res) => {
   const inputConfirmEmail = userData['confirm-email'];
   const inputPassword = userData.password;
 
+  // Input validations
+  if (
+    !inputEmail ||
+    !inputConfirmEmail ||
+    !inputPassword ||
+    inputPassword.trim().length < 6 ||
+    inputEmail !== inputConfirmEmail ||
+    !inputEmail.includes('@')
+  ) {
+    return res.redirect('/signup');
+  }
+
+  // Email exists already?
+  const emailFound = await db.getDb().collection('users').findOne({
+    email: inputEmail
+  });
+  if (emailFound) {
+    return res.redirect('/signup');
+  }
+
   const hashedPassword = await bcrypt.hash(inputPassword, 12);
   const user = {
     email: inputEmail,
@@ -45,8 +65,8 @@ router.post('/login', async (req, res) => {
   const { email: inputEmail, password: inputPassword } = userData;
 
   try {
-    const user = await db.getDb().collection('users').findOne({ 
-      email: inputEmail
+    const user = await db.getDb().collection('users').findOne({
+      email: inputEmail,
     });
 
     if (!user) {
