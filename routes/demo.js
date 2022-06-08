@@ -29,7 +29,7 @@ router.post('/signup', async (req, res) => {
     email: inputEmail,
     password: hashedPassword,
   };
-  
+
   try {
     await db.getDb().collection('users').insertOne(user);
     res.redirect('/login');
@@ -39,7 +39,35 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {});
+// Handle login request
+router.post('/login', async (req, res) => {
+  const userData = req.body;
+  const { email: inputEmail, password: inputPassword } = userData;
+
+  try {
+    const user = await db.getDb().collection('users').findOne({ 
+      email: inputEmail
+    });
+
+    if (!user) {
+      console.info('Could not login - email issue!');
+      return res.redirect('/login');
+    }
+
+    const isPasswordMatching = await bcrypt.compare(
+      inputPassword,
+      user.password
+    );
+    if (!isPasswordMatching) {
+      console.info('Could not login - password issue!');
+      return res.redirect('/login');
+    }
+
+    res.redirect('/admin');
+  } catch (error) {
+    res.status(500).render('500');
+  }
+});
 
 router.get('/admin', (req, res) => {
   res.render('admin');
