@@ -16,7 +16,25 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
-router.post('/signup', async (req, res) => {});
+// Sign-up form submission
+router.post('/signup', async (req, res) => {
+  const userData = req.body;
+  const inputEmail = userData.email;
+  const inputConfirmEmail = userData['confirm-email'];
+  const inputPassword = userData.password;
+
+  const user = {
+    email: inputEmail,
+    password: inputPassword,
+  };
+  try {
+    await db.getDb().collection('users').insertOne(user);
+    res.redirect('/login');
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('500');
+  }
+});
 
 router.post('/login', async (req, res) => {});
 
