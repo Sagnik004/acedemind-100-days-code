@@ -41,3 +41,7 @@ In this section we go through what setup we need to do in client side, backend s
 ## Section-28: AJAX and async JS-driven HTTP requests
 
 In this section we go through the client side implementation of async HTTP requests and handling responses.
+
+## Section-29: User authentication and sessions
+
+As part of this section we will go through how to enable the signup, login, restricted page access and check, and logout functionalities using browser side session cookies.
