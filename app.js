@@ -30,6 +30,23 @@ app.use(session({
   store: sessionStore
 }));
 
+app.use(async (req, res, next) => {
+  const isAuthenticated = req.session.isUserAuthenticated;
+  const savedUser = req.session.user;
+  if (!savedUser || !isAuthenticated) {
+    return next();
+  }
+
+  const user = await db.getDb().collection('users').findOne({
+    _id: savedUser.id
+  });
+  const isAdmin = user.isAdmin;
+  res.locals.isAuthenticated = isAuthenticated;
+  res.locals.isAdmin = isAdmin;
+
+  next();
+});
+
 app.use(demoRoutes);
 
 app.use((error, req, res, next) => {

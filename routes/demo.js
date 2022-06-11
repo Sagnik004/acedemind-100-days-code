@@ -25,7 +25,17 @@ router.get('/signup', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.render('login');
+  let sessionInputData = req.session.inputData;
+  if (!sessionInputData) {
+    sessionInputData = {
+      hasError: false,
+      email: '',
+      password: '',
+    };
+  }
+
+  req.session.inputData = null;
+  res.render('login', { inputData: sessionInputData });
 });
 
 // Sign-up form submission
@@ -62,7 +72,17 @@ router.post('/signup', async (req, res) => {
     email: inputEmail
   });
   if (emailFound) {
-    return res.redirect('/signup');
+    req.session.inputData = {
+      hasError: true,
+      message: 'User exists already!',
+      email: inputEmail,
+      confirmEmail: inputConfirmEmail,
+      password: inputPassword,
+    };
+    req.session.save(function() {
+      res.redirect('/signup');
+    });
+    return;
   }
 
   const hashedPassword = await bcrypt.hash(inputPassword, 12);
@@ -92,7 +112,16 @@ router.post('/login', async (req, res) => {
 
     if (!user) {
       console.info('Could not login - email issue!');
-      return res.redirect('/login');
+      req.session.inputData = {
+        hasError: true,
+        message: 'Invalid credentials!',
+        email: inputEmail,
+        password: inputPassword,
+      };
+      req.session.save(function() {
+        res.redirect('/login');
+      });
+      return;
     }
 
     const isPasswordMatching = await bcrypt.compare(
@@ -101,7 +130,16 @@ router.post('/login', async (req, res) => {
     );
     if (!isPasswordMatching) {
       console.info('Could not login - password issue!');
-      return res.redirect('/login');
+      req.session.inputData = {
+        hasError: true,
+        message: 'Invalid credentials!',
+        email: inputEmail,
+        password: inputPassword,
+      };
+      req.session.save(function() {
+        res.redirect('/login');
+      });
+      return;
     }
 
     req.session.user = {
@@ -118,26 +156,19 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/admin', async (req, res) => {
-  if (!req.session.isUserAuthenticated) {
+  if (!res.locals.isAuthenticated) {
     return res.status(401).render('401');
   }
 
-  try {
-    const sessionUserId = req.session.user.id;
-    const user = await db.getDb().collection('users').findOne({ _id: sessionUserId });
-    if (!user || !user.isAdmin) {
-      return res.status(403).render('403');
-    }
-
-    res.render('admin');
-  } catch (err) {
-    console.error(err);
-    res.render('500');
+  if (!res.locals.isAdmin) {
+    return res.status(403).render('403');
   }
+
+  res.render('admin');
 });
 
 router.get('/profile', (req, res) => {
-  if (!req.session.isUserAuthenticated) {
+  if (!res.locals.isAuthenticated) {
     return res.status(401).render('401');
   }
 
