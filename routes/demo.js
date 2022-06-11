@@ -110,19 +110,38 @@ router.post('/login', async (req, res) => {
     };
     req.session.isUserAuthenticated = true;
     req.session.save(function() {
-      res.redirect('/admin');
+      res.redirect('/profile');
     });
   } catch (error) {
     res.status(500).render('500');
   }
 });
 
-router.get('/admin', (req, res) => {
+router.get('/admin', async (req, res) => {
   if (!req.session.isUserAuthenticated) {
     return res.status(401).render('401');
   }
 
-  res.render('admin');
+  try {
+    const sessionUserId = req.session.user.id;
+    const user = await db.getDb().collection('users').findOne({ _id: sessionUserId });
+    if (!user || !user.isAdmin) {
+      return res.status(403).render('403');
+    }
+
+    res.render('admin');
+  } catch (err) {
+    console.error(err);
+    res.render('500');
+  }
+});
+
+router.get('/profile', (req, res) => {
+  if (!req.session.isUserAuthenticated) {
+    return res.status(401).render('401');
+  }
+
+  res.render('profile');
 });
 
 router.post('/logout', (req, res) => {
