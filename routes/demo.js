@@ -10,7 +10,18 @@ router.get('/', (req, res) => {
 });
 
 router.get('/signup', (req, res) => {
-  res.render('signup');
+  let sessionInputData = req.session.inputData;
+  if (!sessionInputData) {
+    sessionInputData = {
+      hasError: false,
+      email: '',
+      confirmEmail: '',
+      password: '',
+    };
+  }
+
+  req.session.inputData = null;
+  res.render('signup', { inputData: sessionInputData });
 });
 
 router.get('/login', (req, res) => {
@@ -33,7 +44,17 @@ router.post('/signup', async (req, res) => {
     inputEmail !== inputConfirmEmail ||
     !inputEmail.includes('@')
   ) {
-    return res.redirect('/signup');
+    req.session.inputData = {
+      hasError: true,
+      message: 'Invalid input, please check your data!',
+      email: inputEmail,
+      confirmEmail: inputConfirmEmail,
+      password: inputPassword,
+    };
+    req.session.save(function() {
+      res.redirect('/signup');
+    });
+    return;
   }
 
   // Email exists already?
