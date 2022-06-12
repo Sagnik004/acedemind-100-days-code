@@ -45,3 +45,7 @@ In this section we go through the client side implementation of async HTTP reque
 ## Section-29: User authentication and sessions
 
 As part of this section we will go through how to enable the signup, login, restricted page access and check, and logout functionalities using browser side session cookies.
+
+## Section-31: Good coding practices, Refactoring & the MVC pattern
+
+As part of this section we will go through how to build apps following good coding practices, organize code in MVC patterns so that is maintenable in future, and other best practices like code refactoring.
