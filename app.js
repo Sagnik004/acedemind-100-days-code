@@ -7,6 +7,7 @@ const csrf = require('csurf');
 
 const db = require('./data/db');
 const blogRoutes = require('./routes/blog');
+const authRoutes = require('./routes/auth');
 
 const MongoDBStore = mongodbStore(session);
 const app = express();
@@ -53,8 +54,9 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// Blog routes
+// Routes...
 app.use(blogRoutes);
+app.use(authRoutes);
 
 // Global error handling middleware
 app.use((error, req, res, next) => {
