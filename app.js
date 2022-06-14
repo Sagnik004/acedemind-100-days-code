@@ -6,6 +6,7 @@ const csrf = require('csurf');
 
 const db = require('./data/db');
 const sessionConfig = require('./config/session');
+const authMiddleware = require('./middlewares/auth-middleware');
 const blogRoutes = require('./routes/blog');
 const authRoutes = require('./routes/auth');
 
@@ -27,17 +28,7 @@ app.use(session(sessionConfig.createSessionConfig(mongoDbSessionStore)));
 app.use(csrf());
 
 // Middleware to make isAuthenticated available to route handlers and templates
-app.use(async (req, res, next) => {
-  const user = req.session.user;
-  const isAuthenticated = req.session.isAuthenticated;
-
-  if (!user || !isAuthenticated) {
-    return next();
-  }
-
-  res.locals.isUserAuthenticated = isAuthenticated;
-  next();
-});
+app.use(authMiddleware);
 
 // Routes...
 app.use(blogRoutes);
