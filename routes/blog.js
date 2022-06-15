@@ -2,6 +2,7 @@ const router = require('express').Router();
 const mongodb = require('mongodb');
 
 const db = require('../data/db');
+const Post = require('../models/post');
 
 const ObjectId = mongodb.ObjectId;
 
@@ -54,11 +55,8 @@ router.post('/posts', async (req, res) => {
     return res.redirect('/admin');
   }
 
-  const newPost = {
-    title: enteredTitle,
-    content: enteredContent,
-  };
-  await db.getDB().collection('posts').insertOne(newPost);
+  const newPost = new Post(enteredTitle, enteredContent);
+  await newPost.save();
 
   res.redirect('/admin');
 });
