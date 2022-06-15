@@ -91,7 +91,7 @@ router.get('/posts/:id/edit', async (req, res) => {
 router.post('/posts/:id/edit', async (req, res) => {
   const enteredTitle = req.body.title;
   const enteredContent = req.body.content;
-  const postId = new ObjectId(req.params.id);
+  const postId = req.params.id;
 
   if (
     !enteredTitle ||
@@ -108,21 +108,18 @@ router.post('/posts/:id/edit', async (req, res) => {
     return res.redirect(`/posts/${req.params.id}/edit`);
   }
 
-  await db
-    .getDB()
-    .collection('posts')
-    .updateOne(
-      { _id: postId },
-      { $set: { title: enteredTitle, content: enteredContent } }
-    );
+  const post = new Post(enteredTitle, enteredContent, postId);
+  await post.update();
 
   res.redirect('/admin');
 });
 
 // Handle delete post request submission
 router.post('/posts/:id/delete', async (req, res) => {
-  const postId = new ObjectId(req.params.id);
-  await db.getDB().collection('posts').deleteOne({ _id: postId });
+  const postId = req.params.id;
+
+  const post = new Post(undefined, undefined, postId);
+  await post.delete();
 
   res.redirect('/admin');
 });
