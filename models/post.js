@@ -13,6 +13,21 @@ class Post {
     }
   }
 
+  static async fetchAll() {
+    const posts = await db.getDB().collection('posts').find().toArray();
+    return posts;
+  }
+
+  async fetch() {
+    if (!this.id) {
+      return;
+    }
+
+    const postDocument = await db.getDB().collection('posts').findOne({ _id: this.id });
+    this.title = postDocument.title;
+    this.content = postDocument.content;
+  }
+
   async save() {
     const newPost = {
       title: this.title,

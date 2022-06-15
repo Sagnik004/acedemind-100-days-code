@@ -1,10 +1,6 @@
 const router = require('express').Router();
-const mongodb = require('mongodb');
 
-const db = require('../data/db');
 const Post = require('../models/post');
-
-const ObjectId = mongodb.ObjectId;
 
 // Root page
 router.get('/', (req, res) => {
@@ -17,7 +13,7 @@ router.get('/admin', async (req, res) => {
     return res.status(401).render('401');
   }
 
-  const posts = await db.getDB().collection('posts').find().toArray();
+  const posts = await Post.fetchAll();
   let sessionInputData = req.session.inputData;
   if (!sessionInputData) {
     sessionInputData = {
@@ -63,10 +59,11 @@ router.post('/posts', async (req, res) => {
 
 // Render Edit Post page
 router.get('/posts/:id/edit', async (req, res) => {
-  const postId = new ObjectId(req.params.id);
-  const post = await db.getDB().collection('posts').findOne({ _id: postId });
+  const postId = req.params.id;
+  const post = new Post(null, null, postId);
+  await post.fetch();
 
-  if (!post) {
+  if (!post.title || !post.content) {
     return res.render('404');
   }
 
