@@ -7,6 +7,7 @@ const csrf = require('csurf');
 const db = require('./data/db');
 const sessionConfig = require('./config/session');
 const authMiddleware = require('./middlewares/auth-middleware');
+const addCSRFToken = require('./middlewares/csrf-token-middleware');
 const blogRoutes = require('./routes/blog');
 const authRoutes = require('./routes/auth');
 
@@ -26,6 +27,8 @@ app.use(session(sessionConfig.createSessionConfig(mongoDbSessionStore)));
 
 // Setup CSRF
 app.use(csrf());
+// make CSRF token available
+app.use(addCSRFToken);
 
 // Middleware to make isAuthenticated available to route handlers and templates
 app.use(authMiddleware);
