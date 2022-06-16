@@ -1,4 +1,6 @@
 const Post = require('../models/post');
+const validationSession = require('../util/validation-session');
+const validation = require('../util/validation');
 
 const getHome = (req, res) => {
   res.render('welcome', { csrfToken: req.csrfToken() });
@@ -10,19 +12,11 @@ const getAdmin = async (req, res) => {
   }
 
   const posts = await Post.fetchAll();
-  let sessionInputData = req.session.inputData;
-  if (!sessionInputData) {
-    sessionInputData = {
-      hasError: false,
-      title: '',
-      content: '',
-    };
-  }
-  req.session.inputData = null;
+  const sessionErrorData = validationSession.getSessionErrorData(req);
 
   res.render('admin', {
     posts,
-    inputData: sessionInputData,
+    inputData: sessionErrorData,
     csrfToken: req.csrfToken(),
   });
 };
@@ -31,19 +25,16 @@ const createPost = async (req, res) => {
   const enteredTitle = req.body.title;
   const enteredContent = req.body.content;
 
-  if (
-    !enteredTitle ||
-    !enteredContent ||
-    enteredTitle.trim().length === 0 ||
-    enteredContent.trim().length === 0
-  ) {
-    req.session.inputData = {
-      hasError: true,
+  if (!validation.postIsValid(enteredTitle, enteredContent)) {
+    const dataToFlash = {
       message: 'Invalid input - please check your data.',
       title: enteredTitle,
       content: enteredContent,
     };
-    return res.redirect('/admin');
+    validationSession.flashErrorsToSession(req, dataToFlash, function () {
+      res.redirect('/admin');
+    });
+    return;
   }
 
   const newPost = new Post(enteredTitle, enteredContent);
@@ -61,19 +52,15 @@ const getSinglePost = async (req, res) => {
     return res.render('404');
   }
 
-  let sessionInputData = req.session.inputData;
-  if (!sessionInputData) {
-    sessionInputData = {
-      hasError: false,
-      title: post.title,
-      content: post.content,
-    };
-  }
-  req.session.inputData = null;
+  const sessionErrorData = validationSession.getSessionErrorData(
+    req,
+    post.title,
+    post.content
+  );
 
   res.render('single-post', {
     post,
-    inputData: sessionInputData,
+    inputData: sessionErrorData,
     csrfToken: req.csrfToken(),
   });
 };
@@ -83,19 +70,16 @@ const updatePost = async (req, res) => {
   const enteredContent = req.body.content;
   const postId = req.params.id;
 
-  if (
-    !enteredTitle ||
-    !enteredContent ||
-    enteredTitle.trim() === '' ||
-    enteredContent.trim() === ''
-  ) {
-    req.session.inputData = {
-      hasError: true,
+  if (!validation.postIsValid(enteredTitle, enteredContent)) {
+    const dataToFlash = {
       message: 'Invalid input - please check your data.',
       title: enteredTitle,
       content: enteredContent,
     };
-    return res.redirect(`/posts/${req.params.id}/edit`);
+    validationSession.flashErrorsToSession(req, dataToFlash, function () {
+      res.redirect(`/posts/${req.params.id}/edit`);
+    });
+    return;
   }
 
   const post = new Post(enteredTitle, enteredContent, postId);
