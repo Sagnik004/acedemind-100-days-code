@@ -42,9 +42,16 @@ const createPost = async (req, res) => {
   res.redirect('/admin');
 };
 
-const getSinglePost = async (req, res) => {
+const getSinglePost = async (req, res, next) => {
   const postId = req.params.id;
-  const post = new Post(null, null, postId);
+
+  let post;
+  try {
+    post = new Post(null, null, postId);
+  } catch (err) {
+    return next(err);
+  }
+
   await post.fetch();
 
   if (!post.title || !post.content) {
