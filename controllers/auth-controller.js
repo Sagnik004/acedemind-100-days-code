@@ -1,6 +1,4 @@
-const bcrypt = require('bcryptjs');
-
-const db = require('../data/db');
+const User = require('../models/user');
 const validationSession = require('../util/validation-session');
 const validation = require('../util/validation');
 
@@ -51,12 +49,12 @@ const handleSignupReq = async (req, res) => {
     return;
   }
 
+  // Instantiate new user
+  const newUser = new User(enteredEmail, enteredPassword);
+
   // Validate if email already exists
-  const userExists = await db
-    .getDB()
-    .collection('users')
-    .findOne({ email: enteredEmail });
-  if (userExists) {
+  const userExistsAlready = await newUser.existsAlready();
+  if (userExistsAlready) {
     const errorData = {
       message: 'User exists already!',
       email: enteredEmail,
@@ -70,12 +68,7 @@ const handleSignupReq = async (req, res) => {
   }
 
   // Save user in DB with hashed password, and redirect to login page
-  const hashedPassword = await bcrypt.hash(enteredPassword, 12);
-  const user = {
-    email: enteredEmail,
-    password: hashedPassword,
-  };
-  await db.getDB().collection('users').insertOne(user);
+  await newUser.signup();
 
   res.redirect('/login');
 };
@@ -85,12 +78,12 @@ const handleLoginReq = async (req, res) => {
   const enteredEmail = userData.email;
   const enteredPassword = userData.password;
 
-  // Check if email is found
-  const user = await db
-    .getDB()
-    .collection('users')
-    .findOne({ email: enteredEmail });
-  if (!user) {
+  // Instantiate user
+  const newUser = new User(enteredEmail, enteredPassword);
+
+  // Validate user is found
+  const existingUser = await newUser.getUserWithSameEmail();
+  if (!existingUser) {
     const errorData = {
       message: 'Could not log you in - please check your credentials!',
       email: enteredEmail,
@@ -102,9 +95,9 @@ const handleLoginReq = async (req, res) => {
     return;
   }
 
-  // Check if passwords match
-  const passwordMatches = await bcrypt.compare(enteredPassword, user.password);
-  if (!passwordMatches) {
+  // Try logging in
+  const loginSuccessful = await newUser.login(existingUser.password);
+  if (!loginSuccessful) {
     const errorData = {
       message: 'Could not log you in - please check your credentials!',
       email: enteredEmail,
@@ -116,9 +109,10 @@ const handleLoginReq = async (req, res) => {
     return;
   }
 
+  // Setup session data and redirect to admin page
   req.session.user = {
-    id: user._id,
-    email: user.email,
+    id: existingUser._id,
+    email: existingUser.email,
   };
   req.session.isAuthenticated = true;
   req.session.save(function () {

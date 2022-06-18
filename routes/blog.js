@@ -1,13 +1,13 @@
 const router = require('express').Router();
 
-const blogControllers = require('../controllers/post-controllers');
+const blogController = require('../controllers/post-controller');
 
-router.get('/', blogControllers.getHome);
-router.get('/admin', blogControllers.getAdmin);
+router.get('/', blogController.getHome);
+router.get('/admin', blogController.getAdmin);
 
-router.post('/posts', blogControllers.createPost);
-router.get('/posts/:id/edit', blogControllers.getSinglePost);
-router.post('/posts/:id/edit', blogControllers.updatePost);
-router.post('/posts/:id/delete', blogControllers.deletePost);
+router.post('/posts', blogController.createPost);
+router.get('/posts/:id/edit', blogController.getSinglePost);
+router.post('/posts/:id/edit', blogController.updatePost);
+router.post('/posts/:id/delete', blogController.deletePost);
 
 module.exports = router;
