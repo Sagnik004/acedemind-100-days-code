@@ -23,6 +23,10 @@ const renderLogin = (req, res) => {
   });
 };
 
+const renderUnauthorized = (req, res) => {
+  res.status(401).render('401');
+};
+
 const handleSignupReq = async (req, res) => {
   const userData = req.body;
   const enteredEmail = userData.email;
@@ -130,6 +134,7 @@ const handleLogoutReq = (req, res) => {
 module.exports = {
   renderSignup,
   renderLogin,
+  renderUnauthorized,
   handleSignupReq,
   handleLoginReq,
   handleLogoutReq,

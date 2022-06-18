@@ -34,8 +34,8 @@ app.use(addCSRFToken);
 app.use(authMiddleware);
 
 // Routes...
-app.use(blogRoutes);
 app.use(authRoutes);
+app.use(blogRoutes);
 
 // Global error handling middleware
 app.use((error, req, res, next) => {

@@ -7,10 +7,6 @@ const getHome = (req, res) => {
 };
 
 const getAdmin = async (req, res) => {
-  if (!res.locals.isUserAuthenticated) {
-    return res.status(401).render('401');
-  }
-
   const posts = await Post.fetchAll();
   const sessionErrorData = validationSession.getSessionErrorData(req);
 

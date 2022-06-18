@@ -1,12 +1,15 @@
 const router = require('express').Router();
 
-const authControllers = require('../controllers/auth-controller');
+const authController = require('../controllers/auth-controller');
 
 /* Routes... */
-router.get('/signup', authControllers.renderSignup);
-router.get('/login', authControllers.renderLogin);
-router.post('/signup', authControllers.handleSignupReq);
-router.post('/login', authControllers.handleLoginReq);
-router.post('/logout', authControllers.handleLogoutReq);
+router.get('/signup', authController.renderSignup);
+router.get('/login', authController.renderLogin);
+
+router.post('/signup', authController.handleSignupReq);
+router.post('/login', authController.handleLoginReq);
+router.post('/logout', authController.handleLogoutReq);
+
+router.get('/401', authController.renderUnauthorized);
 
 module.exports = router;
