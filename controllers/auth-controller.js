@@ -1,39 +1,26 @@
 const bcrypt = require('bcryptjs');
 
 const db = require('../data/db');
+const validationSession = require('../util/validation-session');
 
 const renderSignup = (req, res) => {
-  let sessionInputData = req.session.inputData;
-
-  if (!sessionInputData) {
-    sessionInputData = {
-      hasError: false,
-      email: '',
-      confirmEmail: '',
-      password: '',
-    };
-  }
-
-  req.session.inputData = null;
+  const sessionErrorData = validationSession.getSessionErrorAuthData(req, {
+    email: '',
+    confirmEmail: '',
+    password: '',
+  });
   res.render('signup', {
-    inputData: sessionInputData,
+    inputData: sessionErrorData,
   });
 };
 
 const renderLogin = (req, res) => {
-  let sessionInputData = req.session.inputData;
-
-  if (!sessionInputData) {
-    sessionInputData = {
-      hasError: false,
-      email: '',
-      password: '',
-    };
-  }
-
-  req.session.inputData = null;
+  const sessionErrorData = validationSession.getSessionErrorAuthData(req, {
+    email: '',
+    password: '',
+  });
   res.render('login', {
-    inputData: sessionInputData,
+    inputData: sessionErrorData,
   });
 };
 

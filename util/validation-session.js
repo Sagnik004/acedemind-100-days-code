@@ -13,6 +13,29 @@ const getSessionErrorData = (req, postTitle, postContent) => {
   return sessionInputData;
 };
 
+const getSessionErrorAuthData = (req, sessionAuthFields) => {
+  let sessionInputData = req.session.inputData;
+  const email = sessionAuthFields.email ? sessionAuthFields.email : null;
+  const confirmEmail = sessionAuthFields.confirmEmail
+    ? sessionAuthFields.confirmEmail
+    : null;
+  const password = sessionAuthFields.password
+    ? sessionAuthFields.password
+    : null;
+
+  if (!sessionInputData) {
+    sessionInputData = {
+      hasError: false,
+      email,
+      confirmEmail,
+      password,
+    };
+  }
+
+  req.session.inputData = null;
+  return sessionInputData;
+};
+
 const flashErrorsToSession = (req, data, action) => {
   req.session.inputData = {
     hasError: true,
@@ -25,4 +48,5 @@ const flashErrorsToSession = (req, data, action) => {
 module.exports = {
   getSessionErrorData,
   flashErrorsToSession,
+  getSessionErrorAuthData,
 };
