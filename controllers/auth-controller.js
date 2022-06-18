@@ -39,15 +39,13 @@ const handleSignupReq = async (req, res) => {
     enteredEmail !== enteredConfirmEmail ||
     !enteredEmail.includes('@')
   ) {
-    req.session.inputData = {
-      hasError: true,
+    const errorData = {
       message: 'Invalid input provided',
       email: enteredEmail,
       confirmEmail: enteredConfirmEmail,
       password: enteredPassword,
     };
-
-    req.session.save(function () {
+    validationSession.flashErrorsToSession(req, errorData, function() {
       res.redirect('/signup');
     });
     return;
@@ -59,15 +57,13 @@ const handleSignupReq = async (req, res) => {
     .collection('users')
     .findOne({ email: enteredEmail });
   if (userExists) {
-    req.session.inputData = {
-      hasError: true,
+    const errorData = {
       message: 'User exists already!',
       email: enteredEmail,
       confirmEmail: enteredConfirmEmail,
       password: enteredPassword,
     };
-
-    req.session.save(function () {
+    validationSession.flashErrorsToSession(req, errorData, function() {
       res.redirect('/signup');
     });
     return;
@@ -95,13 +91,12 @@ const handleLoginReq = async (req, res) => {
     .collection('users')
     .findOne({ email: enteredEmail });
   if (!user) {
-    req.session.inputData = {
-      hasError: true,
+    const errorData = {
       message: 'Could not log you in - please check your credentials!',
       email: enteredEmail,
       password: enteredPassword,
     };
-    req.session.save(function () {
+    validationSession.flashErrorsToSession(req, errorData, function() {
       res.redirect('/login');
     });
     return;
@@ -110,13 +105,12 @@ const handleLoginReq = async (req, res) => {
   // Check if passwords match
   const passwordMatches = await bcrypt.compare(enteredPassword, user.password);
   if (!passwordMatches) {
-    req.session.inputData = {
-      hasError: true,
+    const errorData = {
       message: 'Could not log you in - please check your credentials!',
       email: enteredEmail,
       password: enteredPassword,
     };
-    req.session.save(function () {
+    validationSession.flashErrorsToSession(req, errorData, function() {
       res.redirect('/login');
     });
     return;
