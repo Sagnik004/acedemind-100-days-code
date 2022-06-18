@@ -6,6 +6,22 @@ const postIsValid = (title, content) => {
   return true;
 };
 
+const signupFieldsAreValid = (email, confirmEmail, password) => {
+  if (
+    !email ||
+    !confirmEmail ||
+    !password ||
+    password.trim().length < 6 ||
+    email !== confirmEmail ||
+    !email.includes('@')
+  ) {
+    return false;
+  }
+
+  return true;
+};
+
 module.exports = {
   postIsValid,
+  signupFieldsAreValid,
 };

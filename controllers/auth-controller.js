@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 
 const db = require('../data/db');
 const validationSession = require('../util/validation-session');
+const validation = require('../util/validation');
 
 const renderSignup = (req, res) => {
   const sessionErrorData = validationSession.getSessionErrorAuthData(req, {
@@ -32,12 +33,11 @@ const handleSignupReq = async (req, res) => {
 
   // Validate input data
   if (
-    !enteredEmail ||
-    !enteredConfirmEmail ||
-    !enteredPassword ||
-    enteredPassword.trim().length < 6 ||
-    enteredEmail !== enteredConfirmEmail ||
-    !enteredEmail.includes('@')
+    !validation.signupFieldsAreValid(
+      enteredEmail,
+      enteredConfirmEmail,
+      enteredPassword
+    )
   ) {
     const errorData = {
       message: 'Invalid input provided',
@@ -63,7 +63,7 @@ const handleSignupReq = async (req, res) => {
       confirmEmail: enteredConfirmEmail,
       password: enteredPassword,
     };
-    validationSession.flashErrorsToSession(req, errorData, function() {
+    validationSession.flashErrorsToSession(req, errorData, function () {
       res.redirect('/signup');
     });
     return;
