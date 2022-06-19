@@ -49,3 +49,7 @@ As part of this section we will go through how to enable the signup, login, rest
 ## Section-31: Good coding practices, Refactoring & the MVC pattern
 
 As part of this section we will go through how to build apps following good coding practices, organize code in MVC patterns so that is maintenable in future, and other best practices like code refactoring.
+
+## Section-32: Milestone project - Complete online shop
+
+As part of this section we will build a complete online shop which includes all the concepts learnt above.
