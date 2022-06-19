@@ -1,0 +1,19 @@
+{
+  "name": "my-shop",
+  "version": "1.0.0",
+  "description": "Milestone project - complete online shop",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": ""
+  },
+  "keywords": [],
+  "author": "Sagnik Chakraborty",
+  "license": "ISC",
+  "dependencies": {
+    "express": "4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "2.0.16"
+  }
+}
