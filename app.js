@@ -11,8 +11,13 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Make public folder accessible to get assets
+app.use(express.static('public'));
+
+// Routes
 app.use(authRoutes);
 
+// Start up server
 app.listen(3000, () => {
   console.log(`App started successfully at port 3000...`);
 });
