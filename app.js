@@ -1,8 +1,10 @@
 const path = require('path');
 
 const express = require('express');
+const csrf = require('csurf');
 
 const db = require('./data/database');
+const addCsrfTokenMiddleware = require('./middlewares/csrf-token');
 const authRoutes = require('./routes/auth.routes');
 
 // Create Express app
@@ -17,6 +19,10 @@ app.use(express.static('public'));
 
 // Parse request body sent via forms
 app.use(express.urlencoded({ extended: false }));
+
+// Register csrf, and make token available in res.locals
+app.use(csrf());
+app.use(addCsrfTokenMiddleware);
 
 // Routes
 app.use(authRoutes);
