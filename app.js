@@ -15,6 +15,9 @@ app.set('views', path.join(__dirname, 'views'));
 // Make public folder accessible to get assets
 app.use(express.static('public'));
 
+// Parse request body sent via forms
+app.use(express.urlencoded({ extended: false }));
+
 // Routes
 app.use(authRoutes);
 
