@@ -5,7 +5,7 @@ const getSignup = (req, res) => {
   res.render('customer/auth/signup');
 };
 
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
   const {
     email,
     'confirm-email': confirmEmail,
@@ -16,8 +16,12 @@ const signup = async (req, res) => {
     city,
   } = req.body;
 
-  const user = new User(email, password, name, street, postal, city);
-  await user.signup();
+  try {
+    const user = new User(email, password, name, street, postal, city);
+    await user.signup();  
+  } catch (error) {
+    return next(error);
+  }
 
   res.redirect('/login');
 };
@@ -26,19 +30,31 @@ const getLogin = (req, res) => {
   res.render('customer/auth/login');
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   // Check if email exists
-  const user = new User(email, password);
-  const existingUser = await user.getUserWithSameEmail();
+  let user, existingUser;
+  try {
+    user = new User(email, password);
+    existingUser = await user.getUserWithSameEmail();  
+  } catch (error) {
+    return next(error);
+  }
+  
   if (!existingUser) {
     res.redirect('/login');
     return;
   }
 
   // Check if password matches
-  const passwordIsCorrect = await user.hasMatchingPassword(existingUser.password);
+  let passwordIsCorrect;
+  try {
+    passwordIsCorrect = await user.hasMatchingPassword(existingUser.password);
+  } catch (error) {
+    return next(error);
+  }
+
   if (!passwordIsCorrect) {
     res.redirect('/login');
     return;
