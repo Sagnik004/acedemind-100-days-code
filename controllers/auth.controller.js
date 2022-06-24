@@ -1,9 +1,23 @@
 const User = require('../models/user.model');
 const authUtil = require('../util/authentication');
 const validation = require('../util/validation');
+const sessionFlash = require('../util/session-flash');
 
 const getSignup = (req, res) => {
-  res.render('customer/auth/signup');
+  let sessionData = sessionFlash.getSessionData(req);
+  if (!sessionData) {
+    sessionData = {
+      email: '',
+      confirmEmail: '',
+      password: '',
+      name: '',
+      street: '',
+      postal: '',
+      city: '',
+    };
+  }
+
+  res.render('customer/auth/signup', { inputData: sessionData });
 };
 
 const signup = async (req, res, next) => {
@@ -30,16 +44,32 @@ const signup = async (req, res, next) => {
     !validation.userDetailsAreValid(userInputDetails) ||
     !validation.emailIsConfirmed(email, confirmEmail)
   ) {
-    return res.redirect('/signup');
+    const dataToFlash = {
+      ...userInputDetails,
+      confirmEmail,
+      errorMessage: 'Invalid input. Please verify and re-submit.',
+    };
+    sessionFlash.flashDataToSession(req, dataToFlash, function () {
+      res.redirect('/signup');
+    });
+    return;
   }
 
   const user = new User(email, password, name, street, postal, city);
   try {
     const userExistsAlready = await user.existsAlready();
     if (userExistsAlready) {
-      return res.redirect('/signup');
+      const dataToFlash = {
+        ...userInputDetails,
+        confirmEmail,
+        errorMessage: 'User exists already! Try logging in instead.',
+      };
+      sessionFlash.flashDataToSession(req, dataToFlash, function () {
+        res.redirect('/signup');
+      });
+      return;
     }
-    
+
     await user.signup();
   } catch (error) {
     return next(error);
@@ -49,11 +79,25 @@ const signup = async (req, res, next) => {
 };
 
 const getLogin = (req, res) => {
-  res.render('customer/auth/login');
+  let sessionData = sessionFlash.getSessionData(req);
+  if (!sessionData) {
+    sessionData = {
+      email: '',
+      password: '',
+    };
+  }
+
+  res.render('customer/auth/login', { inputData: sessionData });
 };
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
+
+  const sessionErrorData = {
+    email,
+    password,
+    errorMessage: 'Invalid credentials provided!',
+  };
 
   // Check if email exists
   let user, existingUser;
@@ -65,7 +109,9 @@ const login = async (req, res, next) => {
   }
 
   if (!existingUser) {
-    res.redirect('/login');
+    sessionFlash.flashDataToSession(req, sessionErrorData, function () {
+      res.redirect('/login');
+    });
     return;
   }
 
@@ -78,7 +124,9 @@ const login = async (req, res, next) => {
   }
 
   if (!passwordIsCorrect) {
-    res.redirect('/login');
+    sessionFlash.flashDataToSession(req, sessionErrorData, function () {
+      res.redirect('/login');
+    });
     return;
   }
 

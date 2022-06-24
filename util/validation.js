@@ -18,7 +18,10 @@ const userDetailsAreValid = (userDetails) => {
     !isEmpty(postal) &&
     !isEmpty(city)
   ) {
+    return true;
   }
+
+  return false;
 };
 
 const emailIsConfirmed = (email, confirmEmail) => {
