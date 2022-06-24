@@ -1,5 +1,6 @@
 const User = require('../models/user.model');
 const authUtil = require('../util/authentication');
+const validation = require('../util/validation');
 
 const getSignup = (req, res) => {
   res.render('customer/auth/signup');
@@ -16,9 +17,30 @@ const signup = async (req, res, next) => {
     city,
   } = req.body;
 
+  const userInputDetails = {
+    email,
+    password,
+    name,
+    street,
+    postal,
+    city,
+  };
+
+  if (
+    !validation.userDetailsAreValid(userInputDetails) ||
+    !validation.emailIsConfirmed(email, confirmEmail)
+  ) {
+    return res.redirect('/signup');
+  }
+
+  const user = new User(email, password, name, street, postal, city);
   try {
-    const user = new User(email, password, name, street, postal, city);
-    await user.signup();  
+    const userExistsAlready = await user.existsAlready();
+    if (userExistsAlready) {
+      return res.redirect('/signup');
+    }
+    
+    await user.signup();
   } catch (error) {
     return next(error);
   }
@@ -37,11 +59,11 @@ const login = async (req, res, next) => {
   let user, existingUser;
   try {
     user = new User(email, password);
-    existingUser = await user.getUserWithSameEmail();  
+    existingUser = await user.getUserWithSameEmail();
   } catch (error) {
     return next(error);
   }
-  
+
   if (!existingUser) {
     res.redirect('/login');
     return;
@@ -61,7 +83,7 @@ const login = async (req, res, next) => {
   }
 
   // Create user's session and redirect to home page
-  authUtil.createUserSession(req, existingUser, function() {
+  authUtil.createUserSession(req, existingUser, function () {
     res.redirect('/');
   });
 };
