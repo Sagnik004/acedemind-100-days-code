@@ -6,7 +6,12 @@ const getNewProduct = (req, res) => {
   res.render('admin/products/new-product');
 };
 
-const createNewProduct = () => {};
+const createNewProduct = (req, res) => {
+  console.log(req.body);
+  console.log(req.file);
+
+  res.redirect('/admin/products');
+};
 
 module.exports = {
   getProducts,
