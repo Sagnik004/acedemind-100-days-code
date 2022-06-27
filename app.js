@@ -21,8 +21,9 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Make public folder accessible to get assets
+// Make public folders accessible to get assets
 app.use(express.static('public'));
+app.use('/products/assets', express.static('product-data'));
 
 // Parse request body sent via forms
 app.use(express.urlencoded({ extended: false }));
