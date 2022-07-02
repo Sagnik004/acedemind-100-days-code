@@ -24,3 +24,21 @@ input:focus,
 textarea:focus {
   outline-color: var(--color-primary-400);
 }
+
+#image-upload-control {
+  display: flex;
+  align-items: center;
+}
+
+#image-upload-control input {
+  max-width: 15rem;
+}
+
+#image-upload-control img {
+  width: 6rem;
+  height: 4rem;
+  object-fit: cover;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  display: none;
+}
