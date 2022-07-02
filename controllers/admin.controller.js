@@ -43,7 +43,26 @@ const getUpdateProduct = async (req, res, next) => {
   }
 };
 
-const updateProduct = (req, res) => {};
+const updateProduct = async (req, res, next) => {
+  const product = new Product({
+    ...req.body,
+    _id: req.params.id,
+  });
+
+  if (req.file) {
+    product.replaceImage(req.file.filename);
+  }
+
+  try {
+    await product.save();
+  } catch (error) {
+    console.error(error);
+    next(error);
+    return;
+  }
+
+  res.redirect('/admin/products');
+};
 
 module.exports = {
   getProducts,
